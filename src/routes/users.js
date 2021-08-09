@@ -2,6 +2,10 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcrypt";
+
+const saltRounds = 10;
+
 const userRouter = express.Router();
 
 function readUsers() {
@@ -21,12 +25,17 @@ const getAllUser = (req, res) => {
 
 const addUser = (req, res) => {
   let users = readUsers();
+  let password = req.body.password;
 
+  // hash the user password
+  const passwordHash = bcrypt.hashSync(password, saltRounds);
+
+  // Creates a new user
   const newUser = {
     user_id: uuidv4(),
     first_name: req.body.first_name,
     last_name: req.body.last_name,
-    password: req.body.password,
+    password: passwordHash,
   };
 
   users.push(newUser);

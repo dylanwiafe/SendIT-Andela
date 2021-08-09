@@ -72,15 +72,19 @@ const editParcelStatus = (req, res) => {
   const parcels = readParcels();
   console.log(parcels);
   let objId = req.params.id;
+
+  if (objId === "") {
+    res.status(400).json({ message: "you must add an ID" });
+  }
   let found = parcels.find((item) => {
+    if (objId !== item.id) {
+      return res.status(400).json({
+        message:
+          "an item with the specificed ID does not exist, please check your id again to verify you entered it correctly",
+      });
+    }
     return objId === item.id;
   });
-  if (found === undefined) {
-    return res.status(400).json({
-      message:
-        "an item with the specificed ID does not exist, please check your id again to verify you entered it correctly",
-    });
-  }
 
   found.order_status = req.body.order_status;
 
