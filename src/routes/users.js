@@ -17,11 +17,25 @@ function writeUserToFile(data) {
   fs.writeFileSync(__dirname + "./../data/users.json", data);
 }
 
+function readUserOrders(userId) {
+  let orders = fs.readFileSync(__dirname + "./../data/orders.json", "utf8");
+  let ordersJson = JSON.parse(orders);
+  console.log(ordersJson);
+  let userOrders = ordersJson.find((order) => order.userId === userId);
+  console.log(userOrders);
+  return userOrders;
+}
+
 const getAllUser = (req, res) => {
   const users = readUsers();
 
   return res.json(users);
 };
+
+const getUserOrders = (req, res) => {
+  const orders = readUserOrders(req.body.userId);
+  return res.json(orders);
+}
 
 const addUser = (req, res) => {
   let users = readUsers();
@@ -47,5 +61,8 @@ const addUser = (req, res) => {
 
 userRouter.route("/").post(addUser);
 userRouter.route("/").get(getAllUser);
+
+//TODO: additional routes
+userRouter.route("/:userId/parcels");
 
 module.exports = userRouter;
