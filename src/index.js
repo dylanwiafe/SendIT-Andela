@@ -8,7 +8,7 @@ app.use(express.json());
 
 app.use("/api/v1/users/", userRouter);
 app.use("/api/v1/orders/", orderRouter);
-app.use("/api/v1/login/", authRouter);
+app.use("/api/v1/auth/", authRouter);
 app.listen(8080, () => {
   console.log("the app is running");
 });
