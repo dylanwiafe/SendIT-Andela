@@ -46,5 +46,17 @@
     "last_name": "Thibodaux",
     "password": "$2b$10$lVdDlBdJebogMhiu8Sugs.FYijRa3oFXFiCW9rTahdzCmcZVotCnu",
     "email": "hatemail@yahoo.com"
+  },
+  {
+    "user_id": "e0c64490-9770-41b3-bd94-74b43e408f73",
+    "first_name": "rvkeknrgjn",
+    "last_name": "ernvjnrjg",
+    "password": "$2b$10$4g7dax2/oJ0Y0MnrRL2t7.Yf0drwW3yvglIj/cMMHemyhMvyy2W1m"
+  },
+  {
+    "user_id": "24d796fa-2eac-4244-a87d-24912c0dc932",
+    "first_name": "rvkeknrgjn",
+    "last_name": "ernvjnrjg",
+    "password": "$2b$10$OeNOtNo/vzqiDvxne6rjbO1w2.vM/9Py22AC3Q28vPzEtTwYU1BDq"
   }
 ]

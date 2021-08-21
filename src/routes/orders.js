@@ -4,6 +4,7 @@ import fs, { writeFileSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 const orderRouter = express.Router();
+import Order from "./models/order.model";
 
 function readParcels() {
   let parcels = fs.readFileSync(__dirname + "./../data/orders.json", "utf8");
@@ -16,8 +17,19 @@ function writeParcels(data) {
 
 const addParcel = (req, res) => {
   const parcel = readParcels();
-  const newParcel = {
-    user_id: req.body.user_id,
+  // const newParcel = {
+  //   user_id: req.body.user_id,
+  //   pickup_location: req.body.pickup_location,
+  //   destination: req.body.destination,
+  //   recipient_name: req.body.recipient_name,
+  //   recipient_phone: req.body.recipient_phone,
+  //   description: req.body.description,
+  //   present_location: req.body.present_location,
+  //   order_status: req.body.order_status,
+  //   order_id: uuidv4(),
+  // };
+
+  const newParcel = new Order({
     pickup_location: req.body.pickup_location,
     destination: req.body.destination,
     recipient_name: req.body.recipient_name,
@@ -25,21 +37,32 @@ const addParcel = (req, res) => {
     description: req.body.description,
     present_location: req.body.present_location,
     order_status: req.body.order_status,
-    order_id: uuidv4(),
-  };
-
-  parcel.push(newParcel);
-  writeParcels(JSON.stringify(parcel));
-
-  return res.json({
-    message: "a new parcel has been added",
-    parcel: newParcel,
+    // user_id: uuidv4(),
   });
+
+  newParcel
+    .save()
+    .then(() => {
+      return res.json({
+        message: "a new parcel has been added",
+        parcel: newParcel,
+      });
+    })
+    .catch((err) => {
+      return res.status(400).json({ message: "bad request" });
+    });
 };
 
 let getAllParcels = (req, res) => {
-  let parcels = readParcels();
-  return res.json(parcels);
+  // let parcels = readParcels();
+  // return res.json(parcels);
+  Order.find()
+    .then((orders) => {
+      return res.json(orders);
+    })
+    .catch((err) => {
+      return res.status(404).json({ message: "no orders found" });
+    });
 };
 
 const editParcelDestination = (req, res) => {
