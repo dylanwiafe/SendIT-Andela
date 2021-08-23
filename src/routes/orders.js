@@ -37,7 +37,7 @@ const addParcel = (req, res) => {
     description: req.body.description,
     present_location: req.body.present_location,
     order_status: req.body.order_status,
-    // user_id: uuidv4(),
+    user_id: req.body.user_id,
   });
 
   newParcel
@@ -66,29 +66,50 @@ let getAllParcels = (req, res) => {
 };
 
 const editParcelDestination = (req, res) => {
-  let parcels = readParcels();
   let id = req.params.id;
 
   if (id === "") {
     return res.status(400).json({ message: "you must add an id" });
   }
-  let found = parcels.find((item) => {
-    if (id !== item.id) {
-      return res
-        .status(400)
-        .json({ message: "cannot locate an item with that id" });
-    }
-    return item.id === id;
-  });
 
-  found["destination"] = req.body.destination;
-  // if (found === false) {
-  //   return console.log("cannot find an item with that id");
-  // }
-  console.log(found);
-  writeParcels(JSON.stringify(parcels));
+  try {
+    Order.findByIdAndUpdate(
+      id,
+      { destination: req.body.destination },
+      { new: true },
+      () => {
+        return res.json({ message: "Destination updated" });
+      }
+    );
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Unable to update order destination" });
+  }
 
-  return res.json({ message: "your order has been edited" });
+  // Order.findById(id)
+  //   .then((order) => {
+  //     order.destination = req.body.destination;
+  //     console.log(order);
+
+  //     order
+  //       .save()
+  //       .then(() => {
+  //         return res.json({
+  //           message: "Order destination is changed to " + order.destination,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         return res
+  //           .status(400)
+  //           .json({ message: "unable to update item with that order id" });
+  //       });
+  //   })
+  //   .catch((err) => {
+  //     return res
+  //       .status(404)
+  //       .json({ message: "cannot find order with that specified order id" });
+  //   });
 };
 
 const editParcelStatus = (req, res) => {
@@ -118,7 +139,7 @@ const editParcelStatus = (req, res) => {
 
 orderRouter.route("/").get(getAllParcels);
 orderRouter.route("/").post(addParcel);
-orderRouter.route("/:id").put(editParcelDestination);
+orderRouter.route("/:id").patch(editParcelDestination);
 orderRouter.route("/:id").patch(editParcelStatus);
 
 module.exports = orderRouter;

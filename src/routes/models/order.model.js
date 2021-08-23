@@ -11,7 +11,7 @@ const orderSchema = new Schema(
     description: { type: String, required: false },
     present_location: { type: String, required: false },
     order_status: { type: String, required: true },
-    // user_id: uuidv4(),
+    user_id: { type: String, required: true },
   },
   {
     timestamps: true,
